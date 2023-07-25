@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Transactions - TransferMoney</title>
+  <!-- Liens vers les fichiers CSS et JavaScript de Bootstrap -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+  <!-- En-tête -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/">TransferMoney</a>
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="/dashboard">Tableau de bord</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/logout">Déconnexion</a>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- Contenu de la page de transactions -->
+  <div class="container mt-5">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header">
+            <h3 class="text-center">Transfert d'argent</h3>
+          </div>
+          <div class="card-body">
+            <!-- Formulaire de transfert -->
+            <form id="transactionForm">
+              <div class="form-group">
+                <label for="beneficiaryName">Nom du bénéficiaire</label>
+                <input type="text" class="form-control" id="beneficiaryName" name="beneficiaryName" required>
+              </div>
+              <div class="form-group">
+                <label for="amount">Montant du transfert (FCFA)</label>
+                <input type="number" class="form-control" id="amount" name="amount" required>
+              </div>
+              <button type="submit" class="btn btn-primary btn-block">Envoyer</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script>
+    // Sélectionnez le formulaire de transfert par son ID
+    const transactionForm = document.getElementById('transactionForm');
+  
+    // Ajoutez un gestionnaire d'événements pour le formulaire de transfert
+    transactionForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+  
+      // Récupérez les valeurs du formulaire
+      const formData = new FormData(transactionForm);
+      const beneficiaryName = formData.get('beneficiaryName');
+      const amount = formData.get('amount');
+  
+      // Envoyez les données du formulaire au serveur en utilisant la méthode fetch
+      fetch('/transactions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ beneficiaryName, amount }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          // Vérifiez si la réponse du serveur contient une erreur
+          if (data.error) {
+            // Affichez le message d'erreur dans une fenêtre modale (pop-up)
+            alert(data.error);
+          } else {
+            // Si tout est bon, affichez un message de succès dans une fenêtre modale (pop-up)
+            alert('Transfert effectué avec succès !');
+            // Effacez les champs du formulaire
+            transactionForm.reset();
+          }
+        })
+        .catch((error) => {
+          console.error('Erreur:', error);
+          alert('Erreur du serveur');
+        });
+    });
+  </script>
+</body>
+</html>
