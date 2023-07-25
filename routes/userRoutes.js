@@ -123,10 +123,20 @@ router.post('/login', async (req, res) => {
 
 
   
-  // Page du tableau de bord (accessible uniquement aux utilisateurs authentifiés)
-  router.get('/dashboard', isLoggedIn, (req, res) => {
-    res.render('dashboard');
+// Route GET pour afficher le tableau de bord
+router.get('/dashboard', isLoggedIn, async (req, res) => {
+    try {
+      // Récupérer l'historique des transactions pour l'utilisateur authentifié
+      const transactions = await Transaction.find({ sender: req.session.user._id });
+  
+      // Rendre la page de tableau de bord avec les données des transactions
+      res.render('dashboard', { transactions });
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Une erreur est survenue lors de la récupération des transactions.');
+    }
   });
+  
 
 
 // Déconnexion de l'utilisateur
