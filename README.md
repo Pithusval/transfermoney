@@ -18,11 +18,16 @@ TransferMoney est une application web permettant de transférer de l'argent en l
 
    npm install
 
-5. Démarrez l'application :
+5. Créez un fichier .env à la racine du projet avec la variable d'environnement pour l'URI de votre base de données MongoDB :
+
+MONGODB_URI=your_mongodb_uri
+
+
+6. Démarrez l'application :
 
    npm start
 
-6. Ouvrez votre navigateur et accédez à `http://localhost:3000` pour utiliser l'application.
+7. Ouvrez votre navigateur et accédez à `http://localhost:3000` pour utiliser l'application.
 
 ## Fonctionnalités
 
